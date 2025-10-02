@@ -80,7 +80,7 @@ Required tools (install scripts provided):
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/k8s-devops-template.git
+git clone https://github.com/Kobeep/k8s-devops-template.git
 cd k8s-devops-template
 ```
 

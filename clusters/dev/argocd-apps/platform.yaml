@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/yourusername/k8s-devops-template.git
+    repoURL: https://github.com/Kobeep/k8s-devops-template.git
     targetRevision: main
     path: platform/ingress-nginx
   destination:
@@ -30,7 +30,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/yourusername/k8s-devops-template.git
+    repoURL: https://github.com/Kobeep/k8s-devops-template.git
     targetRevision: main
     path: platform/monitoring
   destination:
@@ -52,7 +52,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/yourusername/k8s-devops-template.git
+    repoURL: https://github.com/Kobeep/k8s-devops-template.git
     targetRevision: main
     path: platform/logging
   destination:
@@ -74,7 +74,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/yourusername/k8s-devops-template.git
+    repoURL: https://github.com/Kobeep/k8s-devops-template.git
     targetRevision: main
     path: platform/security
   destination:
