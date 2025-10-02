@@ -1,0 +1,72 @@
+# Prod cluster: 1 server + 3 agents, HTTP:9080, HTTPS:9443
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+
+metadata:
+  name: k8s-prod
+
+servers: 1
+agents: 3
+
+ports:
+  - port: 9080:80
+    nodeFilters:
+      - loadbalancer
+  - port: 9443:443
+    nodeFilters:
+      - loadbalancer
+  - port: 31000-31010:31000-31010
+    nodeFilters:
+      - server:0
+
+image: rancher/k3s:v1.28.5-k3s1
+
+options:
+  k3d:
+    wait: true
+    timeout: "180s"
+    disableLoadbalancer: false
+
+  k3s:
+    extraArgs:
+      - arg: --disable=traefik
+        nodeFilters:
+          - server:*
+      - arg: --disable=metrics-server
+        nodeFilters:
+          - server:*
+      - arg: --kube-apiserver-arg=audit-log-path=/var/log/kubernetes/audit.log
+        nodeFilters:
+          - server:*
+
+    nodeLabels:
+      - label: environment=prod
+        nodeFilters:
+          - server:*
+          - agent:*
+      - label: workload=production
+        nodeFilters:
+          - agent:*
+
+network: k8s-prod-network
+
+volumes:
+  - volume: /tmp/k8s-prod-logs:/var/log/kubernetes
+    nodeFilters:
+      - server:*
+
+registries:
+  create:
+    name: k8s-prod-registry
+    host: "0.0.0.0"
+    hostPort: "5001"
+
+  config: |
+    mirrors:
+      "localhost:5001":
+        endpoint:
+          - http://k8s-prod-registry:5001
+
+kubeconfig:
+  updateDefaultKubeconfig: true
+  switchCurrentContext: false
