@@ -210,13 +210,6 @@ k8s-devops-template/
 │   ├── deploy-apps.sh               # Deploy applications
 │   ├── validate.sh                  # Validate manifests
 │   └── install-prerequisites.sh     # Install required tools
-├── docs/                            # Documentation
-│   ├── architecture.md              # Architecture overview
-│   ├── getting-started.md           # Getting started guide
-│   ├── rbac.md                      # RBAC configuration
-│   ├── monitoring.md                # Monitoring setup
-│   ├── security.md                  # Security policies
-│   └── troubleshooting.md           # Troubleshooting guide
 └── tests/                           # Integration tests
     ├── cluster-tests.sh
     ├── app-tests.sh
