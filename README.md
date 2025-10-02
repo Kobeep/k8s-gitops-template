@@ -1,4 +1,4 @@
-# 🚀 k8s-devops-template
+# 🚀 k8s-gitops-template
 
 > **Production-ready Kubernetes DevOps template with automated local clusters (dev/prod), GitOps, monitoring, logging, security policies, and CI/CD pipelines.**
 
