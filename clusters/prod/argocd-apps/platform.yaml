@@ -7,9 +7,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Kobeep/k8s-devops-template.git
+    repoURL: https://github.com/Kobeep/k8s-gitops-template.git
     targetRevision: main
-    path: platform/ingress-nginx
+    path: platform/ingress-nginx/overlays/prod
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
@@ -29,9 +29,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Kobeep/k8s-devops-template.git
+    repoURL: https://github.com/Kobeep/k8s-gitops-template.git
     targetRevision: main
-    path: platform/monitoring
+    path: platform/monitoring/overlays/prod
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
@@ -51,12 +51,12 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Kobeep/k8s-devops-template.git
+    repoURL: https://github.com/Kobeep/k8s-gitops-template.git
     targetRevision: main
-    path: platform/logging
+    path: platform/logging/overlays/prod
   destination:
     server: https://kubernetes.default.svc
-    namespace: monitoring
+    namespace: logging
   syncPolicy:
     automated:
       prune: true
@@ -73,9 +73,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Kobeep/k8s-devops-template.git
+    repoURL: https://github.com/Kobeep/k8s-gitops-template.git
     targetRevision: main
-    path: platform/security
+    path: platform/security/overlays/prod
   destination:
     server: https://kubernetes.default.svc
     namespace: security
