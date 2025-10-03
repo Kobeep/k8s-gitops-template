@@ -1,0 +1,36 @@
+controller:
+  replicaCount: 1
+  
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  
+  service:
+    type: NodePort
+    nodePorts:
+      http: 30080
+      https: 30443
+  
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  
+  config:
+    log-level: "debug"
+    use-forwarded-headers: "true"
+    compute-full-forwarded-for: "true"
+  
+  allowSnippetAnnotations: true
+  
+  podDisruptionBudget:
+    enabled: false
+
+admissionWebhooks:
+  enabled: true
+  patch:
+    enabled: true

@@ -1,4 +1,7 @@
-# Platform components for prod cluster
+# Platfor  source:
+    repoURL: https://github.com/Kobeep/k8s-gitops-template.git
+    targetRevision: main
+    path: platform/ingress-nginx/overlays/prodmponents for prod cluster
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -8,7 +11,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Kobeep/k8s-gitops-template.git
+    repoURL: https://github.com/Kobeep/k8s-devops-template.git
     targetRevision: main
     path: platform/ingress-nginx
   destination:
@@ -30,7 +33,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Kobeep/k8s-gitops-template.git
+    repoURL: https://github.com/Kobeep/k8s-devops-template.git
     targetRevision: main
     path: platform/monitoring
   destination:
@@ -52,7 +55,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Kobeep/k8s-gitops-template.git
+    repoURL: https://github.com/Kobeep/k8s-devops-template.git
     targetRevision: main
     path: platform/logging
   destination:
@@ -74,7 +77,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/Kobeep/k8s-gitops-template.git
+    repoURL: https://github.com/Kobeep/k8s-devops-template.git
     targetRevision: main
     path: platform/security
   destination:
