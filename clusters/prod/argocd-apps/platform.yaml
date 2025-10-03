@@ -1,7 +1,3 @@
-# Platfor  source:
-    repoURL: https://github.com/Kobeep/k8s-gitops-template.git
-    targetRevision: main
-    path: platform/ingress-nginx/overlays/prodmponents for prod cluster
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -13,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/Kobeep/k8s-gitops-template.git
     targetRevision: main
-    path: platform/ingress-nginx
+    path: platform/ingress-nginx/overlays/prod
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
@@ -35,7 +31,7 @@ spec:
   source:
     repoURL: https://github.com/Kobeep/k8s-gitops-template.git
     targetRevision: main
-    path: platform/monitoring
+    path: platform/monitoring/overlays/prod
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
@@ -57,10 +53,10 @@ spec:
   source:
     repoURL: https://github.com/Kobeep/k8s-gitops-template.git
     targetRevision: main
-    path: platform/logging
+    path: platform/logging/overlays/prod
   destination:
     server: https://kubernetes.default.svc
-    namespace: monitoring
+    namespace: logging
   syncPolicy:
     automated:
       prune: true
@@ -79,7 +75,7 @@ spec:
   source:
     repoURL: https://github.com/Kobeep/k8s-gitops-template.git
     targetRevision: main
-    path: platform/security
+    path: platform/security/overlays/prod
   destination:
     server: https://kubernetes.default.svc
     namespace: security
