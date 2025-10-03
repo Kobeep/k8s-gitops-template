@@ -1,7 +1,3 @@
-# Platfor  source:
-    repoURL: https://github.com/Kobeep/k8s-gitops-template.git
-    targetRevision: main
-    path: platform/ingress-nginx/overlays/prodmponents for prod cluster
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
