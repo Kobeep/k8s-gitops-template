@@ -1,0 +1,61 @@
+# Dev cluster: 1 server + 2 agents, HTTP:8080, HTTPS:8443
+apiVersion: k3d.io/v1alpha5
+kind: Simple
+
+metadata:
+  name: k8s-dev
+
+servers: 1
+agents: 2
+
+ports:
+  - port: 8080:80
+    nodeFilters:
+      - loadbalancer
+  - port: 8443:443
+    nodeFilters:
+      - loadbalancer
+  - port: 30000-30010:30000-30010
+    nodeFilters:
+      - server:0
+
+image: rancher/k3s:v1.28.5-k3s1
+
+options:
+  k3d:
+    wait: true
+    timeout: "120s"
+    disableLoadbalancer: false
+
+  k3s:
+    extraArgs:
+      - arg: --disable=traefik
+        nodeFilters:
+          - server:*
+      - arg: --disable=metrics-server
+        nodeFilters:
+          - server:*
+
+    nodeLabels:
+      - label: environment=dev
+        nodeFilters:
+          - server:*
+          - agent:*
+
+network: k8s-dev-network
+
+registries:
+  create:
+    name: k8s-dev-registry
+    host: "0.0.0.0"
+    hostPort: "5000"
+
+  config: |
+    mirrors:
+      "localhost:5000":
+        endpoint:
+          - http://k8s-dev-registry:5000
+
+kubeconfig:
+  updateDefaultKubeconfig: true
+  switchCurrentContext: true
