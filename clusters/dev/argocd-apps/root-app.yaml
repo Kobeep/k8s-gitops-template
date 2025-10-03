@@ -8,7 +8,7 @@ spec:
   project: default
 
   source:
-    repoURL: https://github.com/Kobeep/k8s-devops-template.git
+    repoURL: https://github.com/Kobeep/k8s-gitops-template.git
     targetRevision: main
     path: clusters/dev/argocd-apps
 
