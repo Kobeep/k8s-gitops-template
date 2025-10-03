@@ -66,3 +66,7 @@ registries:
       "localhost:5001":
         endpoint:
           - http://k8s-prod-registry:5001
+
+kubeconfig:
+  updateDefaultKubeconfig: true
+  switchCurrentContext: false

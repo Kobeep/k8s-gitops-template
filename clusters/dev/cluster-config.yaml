@@ -55,4 +55,7 @@ registries:
       "localhost:5000":
         endpoint:
           - http://k8s-dev-registry:5000
+
+kubeconfig:
+  updateDefaultKubeconfig: true
   switchCurrentContext: true
