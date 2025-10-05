@@ -45,12 +45,16 @@ loki:
   gateway:
     enabled: false
   
-  # Monitoring
+  # Monitoring - enable self monitoring (required by Helm chart)
   monitoring:
     selfMonitoring:
-      enabled: false
+      enabled: true
       grafanaAgent:
         installOperator: false
+  
+  # Disable tests
+  test:
+    enabled: false
 
 promtail:
   # Promtail configuration
