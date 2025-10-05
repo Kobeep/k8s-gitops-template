@@ -1,0 +1,34 @@
+# Default values for ingress-nginx umbrella chart
+# These values are inherited by the dependency chart
+
+ingress-nginx:
+  controller:
+    # Default resource limits - can be overridden in values-{env}.yaml
+    resources:
+      limits:
+        cpu: 200m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    
+    # Default service configuration
+    service:
+      type: NodePort
+    
+    # Enable metrics by default for Prometheus monitoring
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+    
+    # Basic security settings
+    config:
+      use-forwarded-headers: "true"
+      compute-full-forwarded-for: "true"
+  
+  # Enable admission webhooks for validation
+  admissionWebhooks:
+    enabled: true
+    patch:
+      enabled: true

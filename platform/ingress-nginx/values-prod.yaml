@@ -1,0 +1,64 @@
+# Production environment specific values
+# Overrides default values.yaml
+
+ingress-nginx:
+  controller:
+    replicaCount: 3
+    
+    resources:
+      limits:
+        cpu: 500m
+        memory: 512Mi
+      requests:
+        cpu: 250m
+        memory: 256Mi
+    
+    service:
+      type: NodePort
+      nodePorts:
+        http: 31080
+        https: 31443
+    
+    metrics:
+      enabled: true
+      serviceMonitor:
+        enabled: true
+    
+    config:
+      log-level: "notice"
+      use-forwarded-headers: "true"
+      compute-full-forwarded-for: "true"
+      limit-req-status-code: "429"
+      enable-modsecurity: "true"
+      enable-owasp-modsecurity-crs: "true"
+    
+    allowSnippetAnnotations: false
+    
+    podDisruptionBudget:
+      enabled: true
+      minAvailable: 2
+    
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/name
+                    operator: In
+                    values:
+                      - ingress-nginx
+              topologyKey: kubernetes.io/hostname
+
+  admissionWebhooks:
+    enabled: true
+    patch:
+      enabled: true
+      resources:
+        limits:
+          cpu: 50m
+          memory: 64Mi
+        requests:
+          cpu: 10m
+          memory: 32Mi
