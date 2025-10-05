@@ -1,0 +1,65 @@
+# Default values for security umbrella chart
+# These values are inherited by the dependency chart (kyverno)
+
+kyverno:
+  # Admission controller configuration
+  admissionController:
+    replicas: 1
+    
+    resources:
+      limits:
+        cpu: 400m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
+    
+    # Service configuration
+    service:
+      type: ClusterIP
+  
+  # Background controller - processes existing resources
+  backgroundController:
+    enabled: true
+    
+    resources:
+      limits:
+        cpu: 200m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+  
+  # Cleanup controller - removes old reports
+  cleanupController:
+    enabled: true
+    
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 50m
+        memory: 64Mi
+  
+  # Reports controller - generates policy reports
+  reportsController:
+    enabled: true
+    
+    resources:
+      limits:
+        cpu: 200m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+  
+  # CRDs configuration
+  crds:
+    install: true
+  
+  # Features
+  features:
+    # Enable policy reports
+    policyReports:
+      enabled: true
