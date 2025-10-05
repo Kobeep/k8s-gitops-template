@@ -1,0 +1,59 @@
+# Production environment specific values for logging
+# Overrides default values.yaml
+
+loki:
+  # HA configuration - 3 replicas
+  singleBinary:
+    replicas: 3
+    
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+    
+    persistence:
+      enabled: true
+      size: 50Gi
+    
+    # HA: Pod anti-affinity
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - single-binary
+            topologyKey: kubernetes.io/hostname
+  
+  # PROD: 30 days retention
+  loki:
+    commonConfig:
+      replication_factor: 3
+    
+    limits_config:
+      retention_period: 720h  # 30 days
+      max_query_lookback: 720h
+    
+    compactor:
+      retention_enabled: true
+      retention_delete_delay: 2h
+      working_directory: /var/loki/compactor
+
+promtail:
+  # Higher resources for PROD
+  resources:
+    limits:
+      cpu: 300m
+      memory: 512Mi
+    requests:
+      cpu: 150m
+      memory: 256Mi
+  
+  # PROD: Enable ServiceMonitor for Prometheus
+  serviceMonitor:
+    enabled: true
