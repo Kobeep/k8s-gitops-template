@@ -62,6 +62,10 @@ promtail:
     # Send logs to Loki
     clients:
       - url: http://{{ .Release.Name }}-loki:3100/loki/api/v1/push
+    
+    # Limit positions file size to avoid too many open files
+    positions:
+      filename: /run/promtail/positions.yaml
 
     # Scrape configuration
     snippets:
@@ -72,6 +76,11 @@ promtail:
           kubernetes_sd_configs:
             - role: pod
           relabel_configs:
+            # Drop logs from kube-system namespace to reduce file descriptors
+            - source_labels:
+                - __meta_kubernetes_namespace
+              regex: kube-system
+              action: drop
             - source_labels:
                 - __meta_kubernetes_pod_controller_name
               regex: ([0-9a-z-.]+?)(-[0-9a-f]{8,10})?
