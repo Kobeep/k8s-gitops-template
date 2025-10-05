@@ -63,6 +63,9 @@ spec:
     repoURL: https://github.com/Kobeep/k8s-gitops-template.git
     targetRevision: main
     path: platform/logging
+    helm:
+      valueFiles:
+        - values-dev.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: logging
@@ -85,6 +88,10 @@ spec:
     repoURL: https://github.com/Kobeep/k8s-gitops-template.git
     targetRevision: main
     path: platform/security
+    helm:
+      valueFiles:
+        - values-dev.yaml
+      skipCrds: false
   destination:
     server: https://kubernetes.default.svc
     namespace: security
@@ -94,3 +101,5 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - Replace=true
+      - ServerSideApply=true
