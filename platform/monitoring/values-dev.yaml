@@ -2,6 +2,11 @@
 # Overrides default values.yaml
 
 kube-prometheus-stack:
+  # CRITICAL: Disable admission webhooks - they cause infinite PreSync hooks
+  prometheusOperator:
+    admissionWebhooks:
+      enabled: false
+  
   prometheus:
     prometheusSpec:
       replicas: 1
@@ -48,52 +53,47 @@ kube-prometheus-stack:
 
   grafana:
     replicas: 1
-
-    adminPassword: "admin"
-
+    
+    adminPassword: admin
+    
     resources:
       requests:
         cpu: 100m
-        memory: 256Mi
+        memory: 128Mi
       limits:
         cpu: 200m
-        memory: 512Mi
+        memory: 256Mi
 
     persistence:
       enabled: true
       size: 5Gi
 
-    dashboardProviders:
-      dashboardproviders.yaml:
-        apiVersion: 1
-        providers:
-        - name: 'default'
-          orgId: 1
-          folder: ''
-          type: file
-          disableDeletion: false
-          editable: true
-          options:
-            path: /var/lib/grafana/dashboards/default
-
     service:
       type: NodePort
       nodePort: 30300
 
-  prometheus-node-exporter:
-    resources:
-      requests:
-        cpu: 50m
-        memory: 64Mi
-      limits:
-        cpu: 100m
-        memory: 128Mi
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        datasources:
+          - name: Prometheus
+            type: prometheus
+            url: http://monitoring-dev-kube-promet-prometheus.monitoring:9090
+            access: proxy
+            isDefault: true
 
+  # Disable default node exporters on control plane
+  prometheus-node-exporter:
+    hostRootFsMount:
+      enabled: true
+      mountPropagation: HostToContainer
+
+  # Kube-state-metrics configuration
   kube-state-metrics:
     resources:
       requests:
-        cpu: 50m
-        memory: 64Mi
+        cpu: 10m
+        memory: 32Mi
       limits:
         cpu: 100m
-        memory: 128Mi
+        memory: 64Mi
