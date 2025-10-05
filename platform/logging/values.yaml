@@ -45,10 +45,10 @@ loki:
   gateway:
     enabled: false
   
-  # Monitoring - enable self monitoring (required by Helm chart)
+  # Monitoring - disabled (we'll use Prometheus ServiceMonitor instead)
   monitoring:
     selfMonitoring:
-      enabled: true
+      enabled: false
       grafanaAgent:
         installOperator: false
   
