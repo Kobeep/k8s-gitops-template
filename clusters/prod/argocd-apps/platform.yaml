@@ -37,6 +37,7 @@ spec:
     path: platform/monitoring
     helm:
       valueFiles:
+      skipCrds: false
         - values-prod.yaml
   destination:
     server: https://kubernetes.default.svc
@@ -46,6 +47,8 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
+      - Replace=true
+      - ServerSideApply=true
       - CreateNamespace=true
 
 ---

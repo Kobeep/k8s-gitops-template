@@ -38,6 +38,7 @@ spec:
     helm:
       valueFiles:
         - values-dev.yaml
+      skipCrds: false
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
@@ -47,6 +48,8 @@ spec:
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - Replace=true
+      - ServerSideApply=true
 
 ---
 apiVersion: argoproj.io/v1alpha1
