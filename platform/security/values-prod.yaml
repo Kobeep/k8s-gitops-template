@@ -1,0 +1,99 @@
+# Production environment specific values for Kyverno
+# Overrides default values.yaml
+
+kyverno:
+  # HA configuration - 3 replicas
+  admissionController:
+    replicas: 3
+    
+    resources:
+      limits:
+        cpu: 500m
+        memory: 768Mi
+      requests:
+        cpu: 300m
+        memory: 512Mi
+    
+    # HA: Pod anti-affinity to spread across nodes
+    affinity:
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+                - key: app.kubernetes.io/component
+                  operator: In
+                  values:
+                    - admission-controller
+            topologyKey: kubernetes.io/hostname
+    
+    # HA: Pod disruption budget
+    podDisruptionBudget:
+      enabled: true
+      minAvailable: 2
+  
+  backgroundController:
+    replicas: 2
+    
+    resources:
+      limits:
+        cpu: 300m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
+    
+    # HA: Pod anti-affinity
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                      - background-controller
+              topologyKey: kubernetes.io/hostname
+  
+  cleanupController:
+    resources:
+      limits:
+        cpu: 150m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+  
+  reportsController:
+    replicas: 2
+    
+    resources:
+      limits:
+        cpu: 300m
+        memory: 512Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
+    
+    # HA: Pod anti-affinity
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                  - key: app.kubernetes.io/component
+                    operator: In
+                    values:
+                      - reports-controller
+              topologyKey: kubernetes.io/hostname
+  
+  # PROD: Enable metrics with ServiceMonitor for Prometheus
+  metricsService:
+    create: true
+    type: ClusterIP
+  
+  serviceMonitor:
+    enabled: true

@@ -1,0 +1,48 @@
+# Development environment specific values for Kyverno
+# Overrides default values.yaml
+
+kyverno:
+  # Single replica for DEV
+  admissionController:
+    replicas: 1
+    
+    # Lower resources for DEV
+    resources:
+      limits:
+        cpu: 300m
+        memory: 384Mi
+      requests:
+        cpu: 100m
+        memory: 192Mi
+  
+  backgroundController:
+    resources:
+      limits:
+        cpu: 100m
+        memory: 192Mi
+      requests:
+        cpu: 50m
+        memory: 96Mi
+  
+  cleanupController:
+    resources:
+      limits:
+        cpu: 50m
+        memory: 96Mi
+      requests:
+        cpu: 25m
+        memory: 48Mi
+  
+  reportsController:
+    resources:
+      limits:
+        cpu: 100m
+        memory: 192Mi
+      requests:
+        cpu: 50m
+        memory: 96Mi
+  
+  # DEV: Enable metrics for learning
+  metricsService:
+    create: true
+    type: ClusterIP
