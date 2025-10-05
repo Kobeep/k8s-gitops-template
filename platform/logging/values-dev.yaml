@@ -1,0 +1,38 @@
+# Development environment specific values for logging
+# Overrides default values.yaml
+
+loki:
+  # Single binary for DEV
+  singleBinary:
+    replicas: 1
+    
+    resources:
+      limits:
+        cpu: 300m
+        memory: 768Mi
+      requests:
+        cpu: 150m
+        memory: 384Mi
+    
+    persistence:
+      enabled: true
+      size: 5Gi
+  
+  # DEV: 7 days retention
+  loki:
+    limits_config:
+      retention_period: 168h  # 7 days
+    
+    compactor:
+      retention_enabled: true
+      retention_delete_delay: 2h
+
+promtail:
+  # Lower resources for DEV
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
