@@ -9,7 +9,10 @@ spec:
   source:
     repoURL: https://github.com/Kobeep/k8s-gitops-template.git
     targetRevision: main
-    path: platform/ingress-nginx/overlays/dev
+    path: platform/ingress-nginx
+    helm:
+      valueFiles:
+        - values-dev.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: ingress-nginx
@@ -31,7 +34,10 @@ spec:
   source:
     repoURL: https://github.com/Kobeep/k8s-gitops-template.git
     targetRevision: main
-    path: platform/monitoring/overlays/dev
+    path: platform/monitoring
+    helm:
+      valueFiles:
+        - values-dev.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
