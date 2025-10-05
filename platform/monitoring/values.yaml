@@ -1,0 +1,63 @@
+# Default values for monitoring umbrella chart
+# These values are inherited by the dependency chart (kube-prometheus-stack)
+
+kube-prometheus-stack:
+  # Prometheus configuration
+  prometheus:
+    prometheusSpec:
+      # Allow discovering ServiceMonitors and PodMonitors across all namespaces
+      serviceMonitorSelectorNilUsesHelmValues: false
+      podMonitorSelectorNilUsesHelmValues: false
+      
+      # Default resources - can be overridden in values-{env}.yaml
+      resources:
+        requests:
+          cpu: 200m
+          memory: 512Mi
+        limits:
+          cpu: 500m
+          memory: 1Gi
+
+  # Grafana configuration
+  grafana:
+    # Enable persistence by default
+    persistence:
+      enabled: true
+    
+    # Default service type
+    service:
+      type: NodePort
+    
+    # Dashboard provider for auto-loading dashboards
+    dashboardProviders:
+      dashboardproviders.yaml:
+        apiVersion: 1
+        providers:
+        - name: 'default'
+          orgId: 1
+          folder: ''
+          type: file
+          disableDeletion: false
+          editable: true
+          options:
+            path: /var/lib/grafana/dashboards/default
+
+  # Node exporter for node metrics
+  prometheus-node-exporter:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
+
+  # Kube-state-metrics for Kubernetes object metrics
+  kube-state-metrics:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 64Mi
+      limits:
+        cpu: 100m
+        memory: 128Mi
