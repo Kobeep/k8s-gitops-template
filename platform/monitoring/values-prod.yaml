@@ -2,6 +2,11 @@
 # Overrides default values.yaml
 
 kube-prometheus-stack:
+  # CRITICAL: Disable admission webhooks - they cause infinite PreSync hooks
+  prometheusOperator:
+    admissionWebhooks:
+      enabled: false
+  
   prometheus:
     prometheusSpec:
       replicas: 2
@@ -23,21 +28,11 @@ kube-prometheus-stack:
               requests:
                 storage: 50Gi
 
+      # HA Configuration
+      podAntiAffinity: "hard"
+      
       serviceMonitorSelectorNilUsesHelmValues: false
       podMonitorSelectorNilUsesHelmValues: false
-
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app.kubernetes.io/name
-                  operator: In
-                  values:
-                  - prometheus
-              topologyKey: kubernetes.io/hostname
 
   alertmanager:
     alertmanagerSpec:
@@ -59,80 +54,64 @@ kube-prometheus-stack:
               requests:
                 storage: 5Gi
 
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 100
-            podAffinityTerm:
-              labelSelector:
-                matchExpressions:
-                - key: app.kubernetes.io/name
-                  operator: In
-                  values:
-                  - alertmanager
-              topologyKey: kubernetes.io/hostname
+      # HA Configuration - spread across nodes
+      podAntiAffinity: "hard"
 
   grafana:
     replicas: 2
-
-    adminPassword: "change-me-in-production"
-
+    
+    adminPassword: "ProductionSecurePassword2024!"
+    
     resources:
       requests:
         cpu: 200m
-        memory: 512Mi
+        memory: 256Mi
       limits:
         cpu: 500m
-        memory: 1Gi
+        memory: 512Mi
 
     persistence:
       enabled: true
       size: 10Gi
 
-    dashboardProviders:
-      dashboardproviders.yaml:
-        apiVersion: 1
-        providers:
-        - name: 'default'
-          orgId: 1
-          folder: ''
-          type: file
-          disableDeletion: false
-          editable: true
-          options:
-            path: /var/lib/grafana/dashboards/default
-
     service:
       type: NodePort
       nodePort: 31300
 
+    # HA Configuration
     affinity:
       podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 100
-          podAffinityTerm:
-            labelSelector:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
               matchExpressions:
-              - key: app.kubernetes.io/name
-                operator: In
-                values:
-                - grafana
-            topologyKey: kubernetes.io/hostname
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                    - grafana
+            topologyKey: "kubernetes.io/hostname"
 
+    datasources:
+      datasources.yaml:
+        apiVersion: 1
+        datasources:
+          - name: Prometheus
+            type: prometheus
+            url: http://monitoring-prod-kube-prome-prometheus.monitoring:9090
+            access: proxy
+            isDefault: true
+
+  # Node exporter configuration
   prometheus-node-exporter:
-    resources:
-      requests:
-        cpu: 100m
-        memory: 128Mi
-      limits:
-        cpu: 200m
-        memory: 256Mi
+    hostRootFsMount:
+      enabled: true
+      mountPropagation: HostToContainer
 
+  # Kube-state-metrics configuration
   kube-state-metrics:
     resources:
       requests:
-        cpu: 100m
-        memory: 128Mi
+        cpu: 20m
+        memory: 64Mi
       limits:
         cpu: 200m
-        memory: 256Mi
+        memory: 128Mi

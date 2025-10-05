@@ -37,8 +37,8 @@ spec:
     path: platform/monitoring
     helm:
       valueFiles:
-      skipCrds: false
         - values-prod.yaml
+      skipCrds: false
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
@@ -47,9 +47,9 @@ spec:
       prune: true
       selfHeal: true
     syncOptions:
+      - CreateNamespace=true
       - Replace=true
       - ServerSideApply=true
-      - CreateNamespace=true
 
 ---
 apiVersion: argoproj.io/v1alpha1
