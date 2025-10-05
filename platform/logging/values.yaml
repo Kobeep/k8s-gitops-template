@@ -4,17 +4,17 @@
 loki:
   # Loki deployment mode - monolithic for simplicity
   deploymentMode: SingleBinary
-  
+
   # Single binary configuration
   loki:
     auth_enabled: false
-    
+
     commonConfig:
       replication_factor: 1
-    
+
     storage:
       type: filesystem
-    
+
     schemaConfig:
       configs:
         - from: 2024-01-01
@@ -24,11 +24,11 @@ loki:
           index:
             prefix: index_
             period: 24h
-  
+
   # Single binary resources
   singleBinary:
     replicas: 1
-    
+
     resources:
       limits:
         cpu: 500m
@@ -36,22 +36,22 @@ loki:
       requests:
         cpu: 200m
         memory: 512Mi
-    
+
     persistence:
       enabled: true
       size: 10Gi
-  
+
   # Service configuration
   gateway:
     enabled: false
-  
+
   # Monitoring - disabled (we'll use Prometheus ServiceMonitor instead)
   monitoring:
     selfMonitoring:
       enabled: false
       grafanaAgent:
         installOperator: false
-  
+
   # Disable tests
   test:
     enabled: false
@@ -61,8 +61,8 @@ promtail:
   config:
     # Send logs to Loki
     clients:
-      - url: http://\{\{ .Release.Name }}-loki:3100/loki/api/v1/push
-    
+      - url: http://{{ .Release.Name }}-loki:3100/loki/api/v1/push
+
     # Scrape configuration
     snippets:
       scrapeConfigs: |
@@ -130,7 +130,7 @@ promtail:
                 - __meta_kubernetes_pod_annotation_kubernetes_io_config_hash
                 - __meta_kubernetes_pod_container_name
               target_label: __path__
-  
+
   # Resources
   resources:
     limits:
