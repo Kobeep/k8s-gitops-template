@@ -5,25 +5,24 @@ loki:
   # Loki deployment mode - monolithic for simplicity
   deploymentMode: SingleBinary
 
-  # Single binary configuration
-  loki:
-    auth_enabled: false
+  # Loki configuration
+  auth_enabled: false
 
-    commonConfig:
-      replication_factor: 1
+  commonConfig:
+    replication_factor: 1
 
-    storage:
-      type: filesystem
+  storage:
+    type: filesystem
 
-    schemaConfig:
-      configs:
-        - from: 2024-01-01
-          store: tsdb
-          object_store: filesystem
-          schema: v13
-          index:
-            prefix: index_
-            period: 24h
+  schemaConfig:
+    configs:
+      - from: 2024-01-01
+        store: tsdb
+        object_store: filesystem
+        schema: v13
+        index:
+          prefix: index_
+          period: 24h
 
   # Single binary resources
   singleBinary:

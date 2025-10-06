@@ -19,7 +19,7 @@ loki:
       size: 50Gi
 
     # HA: Pod anti-affinity
-    affinity:
+    affinity: |
       podAntiAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
           - labelSelector:
@@ -32,9 +32,6 @@ loki:
 
   # PROD: 30 days retention
   loki:
-    commonConfig:
-      replication_factor: 3
-
     limits_config:
       retention_period: 720h  # 30 days
       max_query_lookback: 720h

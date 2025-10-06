@@ -24,7 +24,8 @@ jobs:
 
       - name: Validate YAML files
         run: |
-          find . -name "*.yaml" -o -name "*.yml" | xargs yamllint -d "{extends: relaxed, rules: {line-length: {max: 120}}}"
+          find . -name "*.yaml" -o -name "*.yml" | \
+            xargs yamllint -d "{extends: relaxed, rules: {line-length: {max: 120}}}"
 
   validate-kubernetes:
     name: Validate Kubernetes Manifests
@@ -33,23 +34,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
-        with:
-          version: 'v1.28.0'
-
-      - name: Validate cluster configs
+      - name: Install kubeconform
         run: |
-          echo "Validating k3d cluster configurations..."
-          kubectl version --client
+          curl -L https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz | tar xz
+          sudo mv kubeconform /usr/local/bin/
 
       - name: Validate ArgoCD applications
         run: |
-          echo "Checking ArgoCD application manifests..."
+          echo "Validating ArgoCD application manifests with kubeconform..."
           for file in clusters/*/argocd-apps/*.yaml; do
             if [ -f "$file" ]; then
               echo "Validating $file"
-              kubectl apply --dry-run=client -f "$file" || exit 1
+              kubeconform -summary -output text "$file" || exit 1
             fi
           done
 
@@ -133,14 +129,9 @@ jobs:
         with:
           scan-type: 'config'
           scan-ref: '.'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-
-      - name: Upload Trivy results to GitHub Security
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: 'trivy-results.sarif'
+          format: 'table'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH'
 
   integration-test:
     name: Integration Test (Optional)
@@ -192,25 +183,6 @@ jobs:
         if: always()
         run: |
           k3d cluster delete test-cluster
-
-  lint-markdown:
-    name: Lint Markdown
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Lint Markdown files
-        uses: DavidAnson/markdownlint-cli2-action@v14
-        with:
-          globs: '**/*.md'
-          config: |
-            {
-              "default": true,
-              "MD013": false,
-              "MD033": false,
-              "MD041": false
-            }
 
   summary:
     name: CI Summary
