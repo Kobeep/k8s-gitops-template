@@ -5,7 +5,7 @@ loki:
   # Single binary for DEV
   singleBinary:
     replicas: 1
-    
+
     resources:
       limits:
         cpu: 300m

@@ -8,7 +8,7 @@ kube-prometheus-stack:
       # Allow discovering ServiceMonitors and PodMonitors across all namespaces
       serviceMonitorSelectorNilUsesHelmValues: false
       podMonitorSelectorNilUsesHelmValues: false
-      
+
       # Default resources - can be overridden in values-{env}.yaml
       resources:
         requests:
@@ -23,11 +23,11 @@ kube-prometheus-stack:
     # Enable persistence by default
     persistence:
       enabled: true
-    
+
     # Default service type
     service:
       type: NodePort
-    
+
     # Dashboard provider for auto-loading dashboards
     dashboardProviders:
       dashboardproviders.yaml:

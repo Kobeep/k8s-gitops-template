@@ -6,7 +6,7 @@ kube-prometheus-stack:
   prometheusOperator:
     admissionWebhooks:
       enabled: false
-  
+
   prometheus:
     prometheusSpec:
       replicas: 1
@@ -53,9 +53,9 @@ kube-prometheus-stack:
 
   grafana:
     replicas: 1
-    
+
     adminPassword: admin
-    
+
     resources:
       requests:
         cpu: 100m

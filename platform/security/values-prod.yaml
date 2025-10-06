@@ -5,7 +5,7 @@ kyverno:
   # HA configuration - 3 replicas
   admissionController:
     replicas: 3
-    
+
     resources:
       limits:
         cpu: 500m
@@ -13,7 +13,7 @@ kyverno:
       requests:
         cpu: 300m
         memory: 512Mi
-    
+
     # HA: Pod anti-affinity to spread across nodes
     affinity:
       podAntiAffinity:
@@ -25,15 +25,15 @@ kyverno:
                   values:
                     - admission-controller
             topologyKey: kubernetes.io/hostname
-    
+
     # HA: Pod disruption budget
     podDisruptionBudget:
       enabled: true
       minAvailable: 2
-  
+
   backgroundController:
     replicas: 2
-    
+
     resources:
       limits:
         cpu: 300m
@@ -41,7 +41,7 @@ kyverno:
       requests:
         cpu: 200m
         memory: 256Mi
-    
+
     # HA: Pod anti-affinity
     affinity:
       podAntiAffinity:
@@ -55,7 +55,7 @@ kyverno:
                     values:
                       - background-controller
               topologyKey: kubernetes.io/hostname
-  
+
   cleanupController:
     resources:
       limits:
@@ -64,10 +64,10 @@ kyverno:
       requests:
         cpu: 100m
         memory: 128Mi
-  
+
   reportsController:
     replicas: 2
-    
+
     resources:
       limits:
         cpu: 300m
@@ -75,7 +75,7 @@ kyverno:
       requests:
         cpu: 200m
         memory: 256Mi
-    
+
     # HA: Pod anti-affinity
     affinity:
       podAntiAffinity:
@@ -89,11 +89,11 @@ kyverno:
                     values:
                       - reports-controller
               topologyKey: kubernetes.io/hostname
-  
+
   # PROD: Enable metrics with ServiceMonitor for Prometheus
   metricsService:
     create: true
     type: ClusterIP
-  
+
   serviceMonitor:
     enabled: true

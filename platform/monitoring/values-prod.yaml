@@ -6,7 +6,7 @@ kube-prometheus-stack:
   prometheusOperator:
     admissionWebhooks:
       enabled: false
-  
+
   prometheus:
     prometheusSpec:
       replicas: 2
@@ -30,7 +30,7 @@ kube-prometheus-stack:
 
       # HA Configuration
       podAntiAffinity: "hard"
-      
+
       serviceMonitorSelectorNilUsesHelmValues: false
       podMonitorSelectorNilUsesHelmValues: false
 
@@ -59,9 +59,9 @@ kube-prometheus-stack:
 
   grafana:
     replicas: 2
-    
+
     adminPassword: "ProductionSecurePassword2024!"
-    
+
     resources:
       requests:
         cpu: 200m

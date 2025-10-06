@@ -5,7 +5,7 @@ kyverno:
   # Admission controller configuration
   admissionController:
     replicas: 1
-    
+
     resources:
       limits:
         cpu: 400m
@@ -13,15 +13,15 @@ kyverno:
       requests:
         cpu: 200m
         memory: 256Mi
-    
+
     # Service configuration
     service:
       type: ClusterIP
-  
+
   # Background controller - processes existing resources
   backgroundController:
     enabled: true
-    
+
     resources:
       limits:
         cpu: 200m
@@ -29,11 +29,11 @@ kyverno:
       requests:
         cpu: 100m
         memory: 128Mi
-  
+
   # Cleanup controller - removes old reports
   cleanupController:
     enabled: true
-    
+
     resources:
       limits:
         cpu: 100m
@@ -41,11 +41,11 @@ kyverno:
       requests:
         cpu: 50m
         memory: 64Mi
-  
+
   # Reports controller - generates policy reports
   reportsController:
     enabled: true
-    
+
     resources:
       limits:
         cpu: 200m
@@ -53,11 +53,11 @@ kyverno:
       requests:
         cpu: 100m
         memory: 128Mi
-  
+
   # CRDs configuration
   crds:
     install: true
-  
+
   # Features
   features:
     # Enable policy reports

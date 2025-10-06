@@ -4,7 +4,7 @@
 ingress-nginx:
   controller:
     replicaCount: 3
-    
+
     resources:
       limits:
         cpu: 500m
@@ -12,18 +12,18 @@ ingress-nginx:
       requests:
         cpu: 250m
         memory: 256Mi
-    
+
     service:
       type: NodePort
       nodePorts:
         http: 31080
         https: 31443
-    
+
     metrics:
       enabled: true
       serviceMonitor:
         enabled: true
-    
+
     config:
       log-level: "notice"
       use-forwarded-headers: "true"
@@ -31,13 +31,13 @@ ingress-nginx:
       limit-req-status-code: "429"
       enable-modsecurity: "true"
       enable-owasp-modsecurity-crs: "true"
-    
+
     allowSnippetAnnotations: false
-    
+
     podDisruptionBudget:
       enabled: true
       minAvailable: 2
-    
+
     affinity:
       podAntiAffinity:
         preferredDuringSchedulingIgnoredDuringExecution:

@@ -62,7 +62,7 @@ promtail:
     # Send logs to Loki
     clients:
       - url: http://{{ .Release.Name }}-loki:3100/loki/api/v1/push
-    
+
     # Limit positions file size to avoid too many open files
     positions:
       filename: /run/promtail/positions.yaml

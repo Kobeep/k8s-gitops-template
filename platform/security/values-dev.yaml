@@ -5,7 +5,7 @@ kyverno:
   # Single replica for DEV
   admissionController:
     replicas: 1
-    
+
     # Lower resources for DEV
     resources:
       limits:
@@ -14,7 +14,7 @@ kyverno:
       requests:
         cpu: 100m
         memory: 192Mi
-  
+
   backgroundController:
     resources:
       limits:
@@ -23,7 +23,7 @@ kyverno:
       requests:
         cpu: 50m
         memory: 96Mi
-  
+
   cleanupController:
     resources:
       limits:
@@ -32,7 +32,7 @@ kyverno:
       requests:
         cpu: 25m
         memory: 48Mi
-  
+
   reportsController:
     resources:
       limits:
@@ -41,7 +41,7 @@ kyverno:
       requests:
         cpu: 50m
         memory: 96Mi
-  
+
   # DEV: Enable metrics for learning
   metricsService:
     create: true
