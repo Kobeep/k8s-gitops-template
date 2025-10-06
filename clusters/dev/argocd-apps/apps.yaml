@@ -10,10 +10,10 @@ spec:
   source:
     repoURL: https://github.com/Kobeep/k8s-gitops-template.git
     targetRevision: main
-    path: apps/sample-app/manifests
+    path: apps/sample-app
   destination:
     server: https://kubernetes.default.svc
-    namespace: dev
+    namespace: sample-app
   syncPolicy:
     automated:
       prune: true
