@@ -6,6 +6,9 @@
   </p>
 
   <p>
+    <a href="https://github.com/Kobeep/k8s-gitops-template/actions/workflows/ci.yml">
+      <img src="https://github.com/Kobeep/k8s-gitops-template/actions/workflows/ci.yml/badge.svg" alt="CI Pipeline">
+    </a>
     <a href="https://github.com/Kobeep/k8s-gitops-template/graphs/contributors">
       <img src="https://img.shields.io/github/contributors/Kobeep/k8s-gitops-template.svg?style=for-the-badge" alt="Contributors">
     </a>
@@ -55,6 +58,7 @@
     <li><a href="#-usage">Usage</a></li>
     <li><a href="#-project-structure">Project Structure</a></li>
     <li><a href="#-architecture">Architecture</a></li>
+    <li><a href="#-cicd">CI/CD</a></li>
     <li><a href="#-contributing">Contributing</a></li>
     <li><a href="#-license">License</a></li>
     <li><a href="#-contact">Contact</a></li>
@@ -429,6 +433,74 @@ k8s-gitops-template/
                   ↓
 6. Monitoring & logging track the deployment
 ```
+
+<p align="right">(<a href="#-k8s-gitops-template">back to top</a>)</p>
+
+<!-- CI/CD -->
+## 🔄 CI/CD
+
+This project includes automated CI/CD pipelines using **GitHub Actions**.
+
+### CI Pipeline
+
+The CI pipeline runs automatically on every push and pull request to `main` or `develop` branches.
+
+**Pipeline Stages:**
+
+1. **YAML Validation** - Validates all YAML files using yamllint
+2. **Kubernetes Validation** - Validates Kubernetes manifests with kubectl dry-run
+3. **Helm Validation** - Lints all Helm charts in the platform directory
+4. **Script Testing** - Runs shellcheck on all bash scripts
+5. **Security Scanning** - Scans for vulnerabilities using Trivy
+6. **Integration Testing** - Creates a test k3d cluster (PR only)
+7. **Markdown Linting** - Validates markdown documentation
+
+**Status Badge:**
+
+[![CI Pipeline](https://github.com/Kobeep/k8s-gitops-template/actions/workflows/ci.yml/badge.svg)](https://github.com/Kobeep/k8s-gitops-template/actions/workflows/ci.yml)
+
+### Running Tests Locally
+
+Before pushing, you can run validations locally:
+
+```sh
+# Install dependencies
+pip install yamllint
+sudo apt-get install shellcheck
+
+# Validate YAML
+yamllint -c .yamllint .
+
+# Check shell scripts
+shellcheck scripts/*.sh
+
+# Lint Helm charts
+helm lint platform/monitoring/
+helm lint platform/logging/
+helm lint platform/security/
+helm lint platform/ingress-nginx/
+
+# Validate Kubernetes manifests
+kubectl apply --dry-run=client -f clusters/dev/argocd-apps/
+kubectl apply --dry-run=client -f clusters/prod/argocd-apps/
+```
+
+### Release Process
+
+To create a new release:
+
+```sh
+# Create and push a tag
+git tag -a v1.0.0 -m "Release version 1.0.0"
+git push origin v1.0.0
+```
+
+The release workflow will automatically:
+- Create a GitHub release
+- Generate a changelog from commits
+- Tag the release with semantic versioning
+
+For more details, see [`.github/workflows/README.md`](.github/workflows/README.md).
 
 <p align="right">(<a href="#-k8s-gitops-template">back to top</a>)</p>
 
