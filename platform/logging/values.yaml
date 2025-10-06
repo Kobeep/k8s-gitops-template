@@ -4,17 +4,17 @@
 loki:
   # Loki deployment mode - monolithic for simplicity
   deploymentMode: SingleBinary
-  
+
   # Single binary configuration
   loki:
     auth_enabled: false
-    
+
     commonConfig:
       replication_factor: 1
-    
+
     storage:
       type: filesystem
-    
+
     schemaConfig:
       configs:
         - from: 2024-01-01
@@ -24,11 +24,11 @@ loki:
           index:
             prefix: index_
             period: 24h
-  
+
   # Single binary resources
   singleBinary:
     replicas: 1
-    
+
     resources:
       limits:
         cpu: 500m
@@ -36,29 +36,37 @@ loki:
       requests:
         cpu: 200m
         memory: 512Mi
-    
+
     persistence:
       enabled: true
       size: 10Gi
-  
+
   # Service configuration
   gateway:
     enabled: false
-  
-  # Monitoring
+
+  # Monitoring - disabled (we'll use Prometheus ServiceMonitor instead)
   monitoring:
     selfMonitoring:
       enabled: false
       grafanaAgent:
         installOperator: false
 
+  # Disable tests
+  test:
+    enabled: false
+
 promtail:
   # Promtail configuration
   config:
     # Send logs to Loki
     clients:
-      - url: http://\{\{ .Release.Name }}-loki:3100/loki/api/v1/push
+      - url: http://{{ .Release.Name }}-loki:3100/loki/api/v1/push
     
+    # Limit positions file size to avoid too many open files
+    positions:
+      filename: /run/promtail/positions.yaml
+
     # Scrape configuration
     snippets:
       scrapeConfigs: |
@@ -68,6 +76,11 @@ promtail:
           kubernetes_sd_configs:
             - role: pod
           relabel_configs:
+            # Drop logs from kube-system namespace to reduce file descriptors
+            - source_labels:
+                - __meta_kubernetes_namespace
+              regex: kube-system
+              action: drop
             - source_labels:
                 - __meta_kubernetes_pod_controller_name
               regex: ([0-9a-z-.]+?)(-[0-9a-f]{8,10})?
@@ -126,7 +139,7 @@ promtail:
                 - __meta_kubernetes_pod_annotation_kubernetes_io_config_hash
                 - __meta_kubernetes_pod_container_name
               target_label: __path__
-  
+
   # Resources
   resources:
     limits:
