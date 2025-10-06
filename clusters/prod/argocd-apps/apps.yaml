@@ -10,13 +10,16 @@ spec:
   source:
     repoURL: https://github.com/Kobeep/k8s-gitops-template.git
     targetRevision: main
-    path: apps/sample-app/manifests
+    path: apps/sample-app
+    helm:
+      valueFiles:
+        - values-prod.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: prod
+    namespace: sample-app-prod
   syncPolicy:
     automated:
-      prune: false  # Manual sync for prod
+      prune: false
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
